@@ -1,13 +1,21 @@
 import express from "express";
 import cors from "cors";
-import router from "./routes/places";
+import dotenv from "dotenv";
+import scoreRoutes from "./routes/score.js";
+import placesRoutes from "./routes/places.js"; // ✅ add this line
+
+dotenv.config();
+
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT || 5001;
+
 app.use(cors());
-app.use(router);
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
-app.listen(port, () => {
-console.log(`Server listening at port: ${port}`);
+app.use(express.json());
+
+// ✅ Register both routes under /api
+app.use("/api", scoreRoutes);
+app.use("/api", placesRoutes); // ✅ this line is required
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
 });
